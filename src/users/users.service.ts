@@ -14,6 +14,7 @@ export class UsersService {
     return this.userModel.create({
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
+      isActive: createUserDto.isActive,
     });
   }
 
