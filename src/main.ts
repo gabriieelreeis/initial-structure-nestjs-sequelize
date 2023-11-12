@@ -21,17 +21,12 @@ async function bootstrap() {
       "The Nest Rest API. API description the crud operation for user models"
     )
     .setVersion("1.0")
-    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
 
   await app.register(fastifyHelmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: [`'self'`],
-      },
-    },
+    contentSecurityPolicy: false,
   });
   await app.register(fastifyCsrf);
   await app.listen(3000);

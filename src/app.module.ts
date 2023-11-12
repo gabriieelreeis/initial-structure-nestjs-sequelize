@@ -3,7 +3,6 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { UsersModule } from "./users/users.module";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { AuthModule } from "./auth/auth.module";
-import { UsersService } from "./users/users.service";
 
 @Module({
   imports: [
@@ -20,7 +19,7 @@ import { UsersService } from "./users/users.service";
     ThrottlerModule.forRoot([
       {
         ttl: 30000,
-        limit: 5,
+        limit: 10,
       },
     ]),
     UsersModule,

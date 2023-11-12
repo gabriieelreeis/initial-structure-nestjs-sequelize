@@ -46,8 +46,15 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get()
   @ApiBearerAuth()
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  async findAll(): Promise<User[]> {
+    var users: User[] = await this.usersService.findAll();
+
+    users = users.map((user) => {
+      const { password, ...userData } = user.dataValues || user;
+      return userData;
+    }) as User[];
+
+    return users;
   }
 
   @UseGuards(AuthGuard)
@@ -66,8 +73,12 @@ export class UsersController {
     },
   })
   @ApiBearerAuth()
-  findOne(@Param("id") id: number): Promise<User> {
-    return this.usersService.findOne(id);
+  async findOne(@Param("id") id: number): Promise<User> {
+    const user: User = await this.usersService.findOne(id);
+
+    const { password, ...userData } = user.dataValues || user;
+
+    return userData;
   }
 
   @UseGuards(AuthGuard)
