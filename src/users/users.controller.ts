@@ -39,8 +39,12 @@ export class UsersController {
       },
     },
   })
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    const user: User = await this.usersService.create(createUserDto);
+
+    const { password, ...userData } = user.dataValues || user;
+
+    return userData;
   }
 
   @UseGuards(AuthGuard)
