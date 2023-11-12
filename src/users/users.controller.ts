@@ -1,15 +1,31 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./models/user.model";
 import { UsersService } from "./users.service";
-import { ApiTags, ApiParam, ApiBody, ApiOkResponse } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiParam,
+  ApiOkResponse,
+  ApiBearerAuth,
+} from "@nestjs/swagger";
+import { AuthGuard } from "src/auth/auth.guard";
 
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
+  @ApiBearerAuth()
   @ApiOkResponse({
     schema: {
       type: "User",
@@ -27,11 +43,14 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
+  @ApiBearerAuth()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(":id")
   @ApiParam({ name: "id" })
   @ApiOkResponse({
@@ -46,12 +65,15 @@ export class UsersController {
       },
     },
   })
+  @ApiBearerAuth()
   findOne(@Param("id") id: number): Promise<User> {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(":id")
   @ApiParam({ name: "id" })
+  @ApiBearerAuth()
   remove(@Param("id") id: number): Promise<void> {
     return this.usersService.remove(id);
   }

@@ -15,6 +15,8 @@ export class UsersService {
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       isActive: createUserDto.isActive,
+      email: createUserDto.email,
+      password: createUserDto.password,
     });
     return user;
   }
