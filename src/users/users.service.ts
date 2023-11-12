@@ -1,36 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './models/user.model';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { User } from "./models/user.model";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User)
-    private readonly userModel: typeof User,
+    private readonly userModel: typeof User
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    return this.userModel.create({
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user: User = await this.userModel.create({
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       isActive: createUserDto.isActive,
     });
+    return user;
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.findAll();
+    const users: User[] = await this.userModel.findAll();
+    return users;
   }
 
-  findOne(id: string): Promise<User> {
-    return this.userModel.findOne({
+  async findOne(id: number): Promise<User> {
+    const user: User = await this.userModel.findOne({
       where: {
         id,
       },
     });
+    return user;
   }
 
-  async remove(id: string): Promise<void> {
+  async findOneBy(data: {}): Promise<User> {
+    const user: User = await this.userModel.findOne({
+      where: data,
+    });
+    return user;
+  }
+
+  async remove(id: number): Promise<void> {
     const user = await this.findOne(id);
     await user.destroy();
   }
